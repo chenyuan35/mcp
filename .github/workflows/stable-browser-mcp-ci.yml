@@ -1,0 +1,30 @@
+name: stable-browser-mcp-ci
+
+on:
+  pull_request:
+    paths:
+      - 'stable-browser-mcp/**'
+      - '.github/workflows/stable-browser-mcp-ci.yml'
+  push:
+    branches:
+      - 'product/stable-browser-mcp-v0.2'
+    paths:
+      - 'stable-browser-mcp/**'
+      - '.github/workflows/stable-browser-mcp-ci.yml'
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: stable-browser-mcp
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm test
+      - run: npm run build
